@@ -87,6 +87,8 @@ public class WriteActivity extends Fragment{
         title.setError(null);
         if (TextUtils.isEmpty(newTitre)){
             title.setError("Titre incorrect");
+        }else if (TextUtils.isEmpty(newContent)){
+            content.setError("contenu incorrect");
         }else {
             myDbHandler.insertNote(newTitre,newContent,getDateNow(),getDateNow());
             ((MainActivity) getActivity()).toastMessage("Good");

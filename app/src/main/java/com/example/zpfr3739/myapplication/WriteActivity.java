@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import java.util.Locale;
 
 
 /**
- * Created by ZPFR3739 on 10/08/2017.
+ * Activité de création d'une note
  */
 
 public class WriteActivity extends Fragment{
@@ -28,6 +29,8 @@ public class WriteActivity extends Fragment{
     private DBHandler myDbHandler;
     private TextInputLayout title;
     private TextInputLayout content;
+    private Toolbar bottom_toolbar;
+    private Menu bottom_menu;
 
     @Nullable
     @Override
@@ -48,6 +51,9 @@ public class WriteActivity extends Fragment{
         title = (TextInputLayout) getView().findViewById(R.id.input_layout_title);
         content = (TextInputLayout) getView().findViewById(R.id.input_layout_note);
         myDbHandler = new DBHandler(getActivity());
+
+        bottom_toolbar = (Toolbar) getView().findViewById(R.id.bottom_toolbar);
+        bottom_menu = bottom_toolbar.getMenu();
 
 
     }

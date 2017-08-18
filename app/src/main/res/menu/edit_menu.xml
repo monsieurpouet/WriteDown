@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_cut"
+        android:icon="@drawable/ic_format_bold_black_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Bold" />
+    <item
+        android:id="@+id/menu_copy"
+        android:icon="@drawable/ic_format_underlined_black_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Underline" />
+
+</menu>

@@ -1,10 +1,13 @@
 package com.example.zpfr3739.myapplication;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,16 +72,41 @@ public class ListActivity extends Fragment{
         //insérer les notes dans une listview et les afficher
         populateListView();
 
-        //faire une action lorsqu'on clique sur une note
-        mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //faire une action lorsqu'on clique longtemps sur une note
+        mlistView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, final long id) {
 
-                //ajouter fonction pour afficher suppression ou modification
+                //
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        getActivity());
+                alert.setTitle("Attention!!");
+                alert.setMessage("Are you sure to delete this record");
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-                Toast.makeText(getActivity(), "Item deleted : please refresh", Toast.LENGTH_SHORT).show();
-                myDbHandler.removeNote(id);
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //action si confirmation de la suppression
+                        myDbHandler.removeNote(id);
+                        populateListView();
+                        dialog.dismiss();
+
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+
+                return true;
+
             }
 
         });

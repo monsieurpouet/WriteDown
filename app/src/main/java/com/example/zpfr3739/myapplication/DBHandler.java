@@ -110,5 +110,14 @@ public class DBHandler extends SQLiteOpenHelper {
         return data;
     }
 
+    //methode pour supprimer une note
+    public void removeNote(long id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String string =String.valueOf(id);
+        db.execSQL("DELETE FROM Note_Table WHERE id_note = '" + string + "'");
+
+    }
+
+
 
 }

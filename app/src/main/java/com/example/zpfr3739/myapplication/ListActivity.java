@@ -11,9 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -57,8 +59,22 @@ public class ListActivity extends Fragment{
         mlistView = (ListView) getView().findViewById(R.id.liste_note_view);
         myDbHandler = new DBHandler(getActivity());
 
-
         populateListView();
+
+        mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //ajouter fonction pour afficher suppression ou modification
+
+                Toast.makeText(getActivity(), "Item clicked : " + position + "ID: " + id, Toast.LENGTH_SHORT).show();
+                myDbHandler.removeNote(id);
+                populateListView();
+            }
+
+        });
+
     }
 
     @Override
@@ -73,14 +89,14 @@ public class ListActivity extends Fragment{
 
         //recuperer les données et les insérer dans la liste
         Cursor data = myDbHandler.getDataNote();
-        ArrayList<String> listData = new ArrayList<>();
 
+
+          /*
+        ArrayList<String> listData = new ArrayList<>();
         while(data.moveToNext()){
             //recuperer la valeur à la colonne 1 puis l'ajouter à l'arrylist
             listData.add(data.getString(1));
         }
-
-        /*
         //créer un listadapter et parametrer l'adapteur
         ListAdapter adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, listData);
         mlistView.setAdapter(adapter);
@@ -95,4 +111,6 @@ public class ListActivity extends Fragment{
 
 
     }
+
+
 }

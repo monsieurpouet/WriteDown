@@ -47,6 +47,13 @@ public class ListActivity extends Fragment{
                 ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur search");
                 //
                 return true;
+
+            case R.id.app_bar_refresh:
+                ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur refresh");
+                populateListView();
+                //
+                return true;
+
         }
         return false;
     }
@@ -59,8 +66,10 @@ public class ListActivity extends Fragment{
         mlistView = (ListView) getView().findViewById(R.id.liste_note_view);
         myDbHandler = new DBHandler(getActivity());
 
+        //insérer les notes dans une listview et les afficher
         populateListView();
 
+        //faire une action lorsqu'on clique sur une note
         mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -68,9 +77,8 @@ public class ListActivity extends Fragment{
 
                 //ajouter fonction pour afficher suppression ou modification
 
-                Toast.makeText(getActivity(), "Item clicked : " + position + "ID: " + id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Item deleted : please refresh", Toast.LENGTH_SHORT).show();
                 myDbHandler.removeNote(id);
-                populateListView();
             }
 
         });

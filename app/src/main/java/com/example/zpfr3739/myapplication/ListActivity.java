@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,9 +80,19 @@ public class ListActivity extends Fragment{
             listData.add(data.getString(1));
         }
 
+        /*
         //créer un listadapter et parametrer l'adapteur
         ListAdapter adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, listData);
         mlistView.setAdapter(adapter);
+*/
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(),
+                android.R.layout.simple_list_item_2,
+                data,
+                new String[] { DBHandler.NOTE_TITRE, DBHandler.NOTE_CONTENT},
+                new int[] { android.R.id.text1, android.R.id.text2 });
+
+        mlistView.setAdapter(adapter);
+
 
     }
 }

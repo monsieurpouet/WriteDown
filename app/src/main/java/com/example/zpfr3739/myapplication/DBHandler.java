@@ -95,7 +95,7 @@ public class DBHandler extends SQLiteOpenHelper {
     //retourne les info de la table
     public Cursor getDataNote(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + NOTE_TABLE_NAME;
+        String query = "SELECT id_note _id,* FROM " + NOTE_TABLE_NAME;
 
         Cursor data = db.rawQuery(query, null);
         return data;

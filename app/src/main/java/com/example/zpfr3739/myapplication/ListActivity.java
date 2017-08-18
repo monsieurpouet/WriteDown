@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -106,6 +109,26 @@ public class ListActivity extends Fragment{
                 alert.show();
 
                 return true;
+
+            }
+
+        });
+
+        mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
+
+                //action quand on fait un click sur un element de la liste
+                //passage vers le fragment
+
+                Fragment newWriteFrag = new WriteActivity();
+
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, newWriteFrag);
+                ft.commit();
+
+                //renvoyer l'ID, le titre et le contenu de la note
 
             }
 

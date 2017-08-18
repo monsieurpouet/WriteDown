@@ -119,5 +119,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+    //methode pour updater une note en fonction de son ID + modifier date de dernière modif
+
 
 }

@@ -29,8 +29,8 @@ public class WriteActivity extends Fragment{
     private DBHandler myDbHandler;
     private TextInputLayout title;
     private TextInputLayout content;
-    private Toolbar bottom_toolbar;
-    private Menu bottom_menu;
+    //private Toolbar bottom_toolbar;
+    //private Menu bottom_menu;
 
     @Nullable
     @Override
@@ -47,13 +47,13 @@ public class WriteActivity extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Menu Write");
+        getActivity().setTitle("Write");
         title = (TextInputLayout) getView().findViewById(R.id.input_layout_title);
         content = (TextInputLayout) getView().findViewById(R.id.input_layout_note);
         myDbHandler = new DBHandler(getActivity());
 
-        bottom_toolbar = (Toolbar) getView().findViewById(R.id.bottom_toolbar);
-        bottom_menu = bottom_toolbar.getMenu();
+        //bottom_toolbar = (Toolbar) getView().findViewById(R.id.bottom_toolbar);
+        //bottom_menu = bottom_toolbar.getMenu();
 
 
     }

@@ -13,11 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.example.zpfr3739.myapplication.R.id.imageButton;
 
 
 /**
@@ -29,8 +32,16 @@ public class WriteActivity extends Fragment{
     private DBHandler myDbHandler;
     private TextInputLayout title;
     private TextInputLayout content;
-    //private Toolbar bottom_toolbar;
-    //private Menu bottom_menu;
+    private ImageButton imageButton1;
+    private ImageButton imageButton2;
+    private ImageButton imageButton3;
+    private ImageButton imageButton4;
+    private ImageButton imageButton5;
+    private ImageButton imageButton6;
+    private ImageButton imageButton7;
+    private ImageButton imageButton8;
+    private ImageButton imageButton9;
+    private ImageButton imageButton10;
 
     @Nullable
     @Override
@@ -52,9 +63,76 @@ public class WriteActivity extends Fragment{
         content = (TextInputLayout) getView().findViewById(R.id.input_layout_note);
         myDbHandler = new DBHandler(getActivity());
 
-        //bottom_toolbar = (Toolbar) getView().findViewById(R.id.bottom_toolbar);
-        //bottom_menu = bottom_toolbar.getMenu();
-
+        imageButton1 = (ImageButton) getView().findViewById(imageButton);
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton2 = (ImageButton) getView().findViewById(R.id.imageButton2);
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton3 = (ImageButton) getView().findViewById(R.id.imageButton3);
+        imageButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton4 = (ImageButton) getView().findViewById(R.id.imageButton4);
+        imageButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton5 = (ImageButton) getView().findViewById(R.id.imageButton5);
+        imageButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton6 = (ImageButton) getView().findViewById(R.id.imageButton6);
+        imageButton6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton7 = (ImageButton) getView().findViewById(R.id.imageButton7);
+        imageButton7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton8 = (ImageButton) getView().findViewById(R.id.imageButton8);
+        imageButton8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton9 = (ImageButton) getView().findViewById(R.id.imageButton9);
+        imageButton9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
+        imageButton10 = (ImageButton) getView().findViewById(R.id.imageButton10);
+        imageButton10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTextInEditText("kikou");
+            }
+        });
 
     }
 
@@ -86,7 +164,12 @@ public class WriteActivity extends Fragment{
     }
 
 
-    //ajouter les données
+    public void addTextInEditText(String add){
+        content.getEditText().append(add);
+
+    }
+
+    //vérification du contenu de la note et sauvegarde d'une note
     public void onClickSave(){
         String newTitre = title.getEditText().getText().toString();
         String newContent = content.getEditText().getText().toString();

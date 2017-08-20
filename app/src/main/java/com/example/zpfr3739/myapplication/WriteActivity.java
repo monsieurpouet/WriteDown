@@ -67,70 +67,73 @@ public class WriteActivity extends Fragment{
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" ** ** ");
             }
         });
         imageButton2 = (ImageButton) getView().findViewById(R.id.imageButton2);
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" * * ");
             }
         });
         imageButton3 = (ImageButton) getView().findViewById(R.id.imageButton3);
         imageButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" [ ]( ) ");
             }
         });
         imageButton4 = (ImageButton) getView().findViewById(R.id.imageButton4);
         imageButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" \n");
+                addTextInEditText("- ");
             }
         });
         imageButton5 = (ImageButton) getView().findViewById(R.id.imageButton5);
         imageButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" \n");
+                addTextInEditText("1. ");
             }
         });
         imageButton6 = (ImageButton) getView().findViewById(R.id.imageButton6);
         imageButton6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" ![ ]( ) ");
             }
         });
         imageButton7 = (ImageButton) getView().findViewById(R.id.imageButton7);
         imageButton7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText("    ");
             }
         });
         imageButton8 = (ImageButton) getView().findViewById(R.id.imageButton8);
         imageButton8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" \n");
+                addTextInEditText("> ");
             }
         });
         imageButton9 = (ImageButton) getView().findViewById(R.id.imageButton9);
         imageButton9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText(" ~~ ~~ ");
             }
         });
         imageButton10 = (ImageButton) getView().findViewById(R.id.imageButton10);
         imageButton10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText("kikou");
+                addTextInEditText("#");
             }
         });
 

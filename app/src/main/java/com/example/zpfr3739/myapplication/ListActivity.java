@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FilterQueryProvider;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,8 +34,9 @@ import java.util.ArrayList;
 
 public class ListActivity extends Fragment{
 
-    private DBHandler myDbHandler;
-    private ListView mlistView;
+    DBHandler myDbHandler;
+    ListView mlistView;
+    SimpleCursorAdapter adapter;
 
 
     @Nullable
@@ -49,10 +52,10 @@ public class ListActivity extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.app_bar_search:
+           /* case R.id.app_bar_search:
                 ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur search");
                 //
-                return true;
+                return true;*/
 
             case R.id.app_bar_refresh:
                 ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur refresh");
@@ -141,6 +144,23 @@ public class ListActivity extends Fragment{
 
         menu.clear();
         inflater.inflate(R.menu.list_menu, menu);
+
+        MenuItem itemSearch = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = new SearchView(getActivity());
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        itemSearch.setActionView(searchView);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -150,26 +170,21 @@ public class ListActivity extends Fragment{
         Cursor data = myDbHandler.getDataNote();
 
 
-          /*
-        ArrayList<String> listData = new ArrayList<>();
-        while(data.moveToNext()){
-            //recuperer la valeur à la colonne 1 puis l'ajouter à l'arrylist
-            listData.add(data.getString(1));
-        }
-        //créer un listadapter et parametrer l'adapteur
-        ListAdapter adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, listData);
-        mlistView.setAdapter(adapter);
-*/
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(),
+        adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_2,
                 data,
                 new String[] { DBHandler.NOTE_TITRE, DBHandler.NOTE_CONTENT},
                 new int[] { android.R.id.text1, android.R.id.text2 });
 
         mlistView.setAdapter(adapter);
-
+        adapter.setFilterQueryProvider(new FilterQueryProvider() {
+            @Override
+            public Cursor runQuery(CharSequence constraint) {
+                String partialValue = constraint.toString();
+                return myDbHandler.getNoteByTitle(partialValue);
+            }
+    });
 
     }
-
 
 }

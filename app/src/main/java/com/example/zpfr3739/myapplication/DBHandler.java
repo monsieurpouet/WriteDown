@@ -122,10 +122,11 @@ public class DBHandler extends SQLiteOpenHelper {
     //methode pour updater une note en fonction de son ID + modifier date de dernière modif
 
 
+
+    //recherche de note par le titre qui contient les caracteres saisies
     public Cursor getNoteByTitle(String partialValue){
-        //recherche de note par le titre qui contient les caracteres saisies
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "+ NOTE_ID + " FROM " + NOTE_TABLE_NAME + " WHERE " + NOTE_TITRE + " = '" + partialValue + "'";
+        String query = "SELECT id_note _id,* FROM " + NOTE_TABLE_NAME + " WHERE " + NOTE_TITRE + " like '%" + partialValue + "%'";
 
         Cursor data = db.rawQuery(query, null);
         return data;

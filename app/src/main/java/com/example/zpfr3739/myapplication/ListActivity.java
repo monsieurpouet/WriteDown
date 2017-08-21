@@ -123,7 +123,7 @@ public class ListActivity extends Fragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
 
                 //action quand on fait un click sur un element de la liste
-                //passage vers le fragment
+                //passage vers le fragment d'écriture
 
                 Fragment newWriteFrag = new WriteActivity();
 
@@ -177,6 +177,8 @@ public class ListActivity extends Fragment{
                 new int[] { android.R.id.text1, android.R.id.text2 });
 
         mlistView.setAdapter(adapter);
+
+        //ajout d'un filtre pour pouvoir effectuer des recherches
         adapter.setFilterQueryProvider(new FilterQueryProvider() {
             @Override
             public Cursor runQuery(CharSequence constraint) {

@@ -156,6 +156,12 @@ public class WriteActivity extends Fragment{
                 ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur save");
                 onClickSave();
                 return true;
+
+            case R.id.app_bar_clear:
+                ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur clear");
+                onClickClear();
+                return true;
+
         }
         return false;
     }
@@ -187,6 +193,14 @@ public class WriteActivity extends Fragment{
 
         }
     }
+
+    //effacer le titre et le contenu de la note
+    public void onClickClear(){
+
+        title.getEditText().setText("");
+        content.getEditText().setText("");
+    }
+
 
 
 }

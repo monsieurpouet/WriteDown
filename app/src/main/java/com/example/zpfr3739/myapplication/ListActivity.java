@@ -52,11 +52,6 @@ public class ListActivity extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-           /* case R.id.app_bar_search:
-                ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur search");
-                //
-                return true;*/
-
             case R.id.app_bar_refresh:
                 ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur refresh");
                 populateListView();

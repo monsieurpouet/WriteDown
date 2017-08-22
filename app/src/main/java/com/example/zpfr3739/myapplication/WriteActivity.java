@@ -168,7 +168,7 @@ public class WriteActivity extends Fragment{
 
     public String getDateNow(){
         Date dateNow = new Date();
-        DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT,new Locale("FR","fr"));
+        DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT,Locale.FRANCE);
         return shortDateFormat.format(dateNow);
     }
 

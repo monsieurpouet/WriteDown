@@ -10,12 +10,6 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/app_bar_refresh"
-        android:icon="@drawable/ic_refresh_black_24dp"
-        android:title="Delete"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/app_bar_about"
         android:icon="@drawable/ic_flag_black_24dp"
         android:title="About"

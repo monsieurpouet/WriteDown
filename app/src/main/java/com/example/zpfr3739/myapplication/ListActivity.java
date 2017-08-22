@@ -52,11 +52,11 @@ public class ListActivity extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.app_bar_refresh:
+            /*case R.id.app_bar_refresh:
                 ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur refresh");
                 populateListView();
                 //
-                return true;
+                return true;*/
 
         }
         return false;
@@ -168,7 +168,7 @@ public class ListActivity extends Fragment{
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_2,
                 data,
-                new String[] { DBHandler.NOTE_TITRE, DBHandler.NOTE_CONTENT},
+                new String[] { DBHandler.NOTE_TITRE, DBHandler.NOTE_CREATE_DATE},
                 new int[] { android.R.id.text1, android.R.id.text2 });
 
         mlistView.setAdapter(adapter);

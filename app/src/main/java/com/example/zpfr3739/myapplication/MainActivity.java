@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import static java.lang.System.exit;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -104,8 +106,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.item_sync:
                 //fragment = new Menu3();
                 break;
-            case R.id.item_logout:
-                //fragment = new Menu3();
+            case R.id.item_quit:
+                //sortie de l'application
+                exit(0);
                 break;
         }
 

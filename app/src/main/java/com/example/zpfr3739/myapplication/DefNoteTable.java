@@ -15,18 +15,7 @@ public class DefNoteTable {
     private String date_creation;   // Date de creation de la note
     private String date_modification;   // Date de dernière modification de la note
 
-    /**
-     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-     ContentValues contentValues=new ContentValues();
-     contentValues.put("lsd", dateFormat.format(lsd));
 
-
-     String date_string ="2016-06-28";
-     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-     Date date = (Date) formatter.parse(date_string);
-     System.out.println("Today is " + date.getTime());
-
-     */
     public DefNoteTable(){
 
     }

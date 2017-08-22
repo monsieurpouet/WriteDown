@@ -18,8 +18,8 @@
             android:icon="@drawable/ic_sync_black_24dp"/>
 
         <item
-            android:id="@+id/item_logout"
-            android:title="Logout"
+            android:id="@+id/item_quit"
+            android:title="Quit"
             android:icon="@drawable/ic_vertical_align_top_black_24dp"/>
     </group>
 

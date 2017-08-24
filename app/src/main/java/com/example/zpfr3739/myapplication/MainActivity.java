@@ -1,12 +1,8 @@
 package com.example.zpfr3739.myapplication;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,6 +40,9 @@ public class MainActivity extends AppCompatActivity
 
         //add this line to display menu1 when the activity is loaded
         displaySelectedScreen(R.id.item_write);
+
+        //URL du serveur web
+        String serverweb_url = "http://192.168.43.87/myfiles/index.php";
     }
 
     @Override
@@ -126,6 +125,5 @@ public class MainActivity extends AppCompatActivity
     public void toastMessage(String message){
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
     }
-
 
 }

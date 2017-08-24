@@ -1,13 +1,12 @@
 package com.example.zpfr3739.myapplication;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -33,17 +31,18 @@ public class WriteActivity extends Fragment{
     private DBHandler myDbHandler;
     private TextInputLayout title;
     private TextInputLayout content;
-    private ImageButton imageButton1;
-    private ImageButton imageButton2;
-    private ImageButton imageButton3;
-    private ImageButton imageButton4;
-    private ImageButton imageButton5;
-    private ImageButton imageButton6;
-    private ImageButton imageButton7;
-    private ImageButton imageButton8;
-    private ImageButton imageButton9;
-    private ImageButton imageButton10;
+    private ImageButton imageButton1;//bold
+    private ImageButton imageButton2;//italique
+    private ImageButton imageButton3;//link
+    private ImageButton imageButton4;//list with no number
+    private ImageButton imageButton5;//list with number
+    private ImageButton imageButton6;//images
+    private ImageButton imageButton7;//code
+    private ImageButton imageButton8;//quote
+    private ImageButton imageButton9;//texte barré
+    private ImageButton imageButton10;//title
     private long key_id_note;
+    private static final int PICK_IMAGE_REQUEST= 99;
 
     @Nullable
     @Override
@@ -126,7 +125,8 @@ public class WriteActivity extends Fragment{
         imageButton6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTextInEditText(" ![ ]( ) ");
+                showFileChooser();
+                //addTextInEditText(" ![ ]( ) ");
             }
         });
         imageButton7 = (ImageButton) getView().findViewById(R.id.imageButton7);
@@ -227,6 +227,14 @@ public class WriteActivity extends Fragment{
         content.getEditText().setText("");
     }
 
+
+    //ouverture de la galerie
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
 
 
 }

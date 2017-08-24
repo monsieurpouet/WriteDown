@@ -1,0 +1,13 @@
+############TO DO###############
+
+content provider quand clique sur boutn edition image > renvoi vers galerie ou appareil photo
+format date de la note >>> fuck
+clic court sur une note de la liste redirige vers fragment ecriture
+Tâche asynchrone et connexion HTTP> voir cours N°6 appli communicante 
+export des notes > voir export sqlite
+
+##########DONE#############
+
+changement couleur de base > jaune moutarde comme google note
+iconfinder
+supprimer icone refresh

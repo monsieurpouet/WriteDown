@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import java.util.Date;
 
 
 public class DBHandler extends SQLiteOpenHelper {

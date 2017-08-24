@@ -1,13 +1,50 @@
 ############TO DO###############
 
-content provider quand clique sur boutn edition image > renvoi vers galerie ou appareil photo
-format date de la note >>> fuck
-clic court sur une note de la liste redirige vers fragment ecriture
-Tâche asynchrone et connexion HTTP> voir cours N°6 appli communicante 
-export des notes > voir export sqlite
+
+1)content provider quand clique sur bouton edition image > renvoi vers galerie ou appareil photo
+
+https://stackoverflow.com/questions/39703655/how-to-upload-image-on-server-using-volley
+https://www.youtube.com/watch?v=4LCnoVqQ6N4
+https://www.simplifiedcoding.net/android-upload-image-to-server/
+http://viralpatel.net/blogs/pick-image-from-galary-android-app/
+https://stackoverflow.com/questions/16391124/picture-coming-from-camera-or-gallery
+
+
+2)format date de la note >>> fuck
+
+
+3)Tâche asynchrone et connexion HTTP> voir cours N°6 appli communicante
+ 
+	https://stackoverflow.com/questions/25398200/uploading-file-in-php-server-from-android-device
+	https://stackoverflow.com/questions/4126625/how-do-i-send-a-file-in-android-from-a-mobile-device-to-server-using-http
+	https://www.youtube.com/watch?v=K48jnbM8yS4
+	http://androidexample.com/Upload_File_To_Server_-_Android_Example/index.php?view=article_discription&aid=83
+	http://www.coderefer.com/android-upload-file-to-server/
+	
+	http://www.thecrazyprogrammer.com/2016/09/android-upload-image-server-using-volley.html
+	https://www.mytrendin.com/send-images-remote-server-android-using-volley-library/
+
+	penser à modifier l'androidmanifest:
+	android.permission.INTERNET
+	android.permission.WRITE_EXTERNAL_STORAGE
+
+	
+
+
+4)export de la base de données Sqlite via bouton du navigation drawer> voir export sqlite
+export du .db avec nomage approprié
+
+https://stackoverflow.com/questions/19093458/copy-database-file-to-sdcard-in-android
+https://stackoverflow.com/questions/26581801/how-to-save-listview-item-as-a-text-file
+https://www.youtube.com/watch?v=0Mi32_uf1MY
+https://www.youtube.com/watch?v=BCTgJNo0pDU
+https://www.youtube.com/watch?v=NXYYdMVioQ0
+https://www.youtube.com/watch?v=-V25G7pR1nE
+
 
 ##########DONE#############
 
 changement couleur de base > jaune moutarde comme google note
 iconfinder
 supprimer icone refresh
+clic court sur une note de la liste redirige vers fragment ecriture

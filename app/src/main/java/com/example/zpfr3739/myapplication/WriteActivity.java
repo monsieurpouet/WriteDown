@@ -1,5 +1,6 @@
 package com.example.zpfr3739.myapplication;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -42,6 +43,7 @@ public class WriteActivity extends Fragment{
     private ImageButton imageButton8;
     private ImageButton imageButton9;
     private ImageButton imageButton10;
+    private long key_id_note;
 
     @Nullable
     @Override
@@ -49,6 +51,9 @@ public class WriteActivity extends Fragment{
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
         setHasOptionsMenu(true);
+
+
+
         return inflater.inflate(R.layout.fragment_write, container, false);
     }
 
@@ -62,6 +67,23 @@ public class WriteActivity extends Fragment{
         title = (TextInputLayout) getView().findViewById(R.id.input_layout_title);
         content = (TextInputLayout) getView().findViewById(R.id.input_layout_note);
         myDbHandler = new DBHandler(getActivity());
+
+        //initialisation de l'id d'une note à zero
+        //si l'ID est modifié cela signifie qu'il s'agit d'une modification de note; sinon c'est qu'il s'agit d'une nouvelle note
+        key_id_note = 0;
+
+        //recupération du bundle si envoyé par fragment de liste, puis insertion de la note concernée dans les edittext afin de les modifier
+        Bundle bundle_list = getArguments();
+        if (bundle_list != null) {
+            key_id_note = bundle_list.getLong("ID_NOTE");
+            Cursor curs_note = myDbHandler.getNoteById(key_id_note);
+            if (curs_note.moveToFirst()) {
+                //str = cursor.getString(cursor.getColumnIndex("content"));
+                title.getEditText().setText(curs_note.getString(curs_note.getColumnIndex("titre_note")));
+                content.getEditText().setText(curs_note.getString(curs_note.getColumnIndex("note")));
+            }
+
+        }
 
         imageButton1 = (ImageButton) getView().findViewById(imageButton);
         imageButton1.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +210,11 @@ public class WriteActivity extends Fragment{
         }else if (TextUtils.isEmpty(newContent)){
             content.setError("contenu incorrect");
         }else {
-            myDbHandler.insertNote(newTitre,newContent,getDateNow(),getDateNow());
+            if (key_id_note == 0){
+                myDbHandler.insertNote(newTitre,newContent,getDateNow(),getDateNow());
+            }else{
+                myDbHandler.updateNoteById(key_id_note,newTitre,newContent,getDateNow());
+            }
             ((MainActivity) getActivity()).toastMessage("Good");
 
         }

@@ -120,6 +120,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     //methode pour updater une note en fonction de son ID + modifier date de dernière modif
+    public Cursor getNoteById(long id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + NOTE_TITRE +"," + NOTE_CONTENT + " FROM " + NOTE_TABLE_NAME + " WHERE " + NOTE_ID + " = " + id + " ";
+
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
 
 
 
@@ -131,5 +138,18 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor data = db.rawQuery(query, null);
         return data;
     }
+
+    //update d'une note par ID
+    public void updateNoteById(long id, String newtitre, String newnote, String newdate_modif){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(NOTE_TITRE, newtitre);
+        values.put(NOTE_CONTENT, newnote);
+        values.put(NOTE_MODIFY_DATE, newdate_modif);
+        db.update(NOTE_TABLE_NAME,values, "id_note=" + id, null);
+        db.close();
+    }
+
 
 }

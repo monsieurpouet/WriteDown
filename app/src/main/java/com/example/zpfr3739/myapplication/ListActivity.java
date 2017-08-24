@@ -122,6 +122,16 @@ public class ListActivity extends Fragment{
 
                 Fragment newWriteFrag = new WriteActivity();
 
+                //ajout d'un bundle contenant l'id de la note
+                // pour pouvoir le renvoyer au fragment d'écriture pour modifier la note concernée
+                Bundle arguments = new Bundle();
+                //int id_note = (int) id;
+                //arguments.putInt("ID_NOTE", id_note);
+                arguments.putLong("ID_NOTE", id);
+
+                newWriteFrag.setArguments(arguments);
+
+
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, newWriteFrag);
                 ft.commit();

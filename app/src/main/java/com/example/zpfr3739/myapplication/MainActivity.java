@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.item_sync:
                 //fragment = new Menu3();
                 break;
+            case R.id.item_export:
+                //fragment = new Menu3();
+                break;
             case R.id.item_quit:
                 //sortie de l'application
                 exit(0);

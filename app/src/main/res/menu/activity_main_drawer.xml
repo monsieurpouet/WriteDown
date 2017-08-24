@@ -18,6 +18,11 @@
             android:icon="@drawable/ic_sync_black_24dp"/>
 
         <item
+            android:id="@+id/item_export"
+            android:title="Export"
+            android:icon="@drawable/ic_cloud_upload_black_24dp"/>
+
+        <item
             android:id="@+id/item_quit"
             android:title="Quit"
             android:icon="@drawable/ic_vertical_align_top_black_24dp"/>

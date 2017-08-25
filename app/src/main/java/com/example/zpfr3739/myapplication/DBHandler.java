@@ -18,7 +18,7 @@ import android.database.Cursor;
 public class DBHandler extends SQLiteOpenHelper {
 
     //Database Name
-    private static final String DATABASE_NAME = "writedown.db";
+    public static final String DATABASE_NAME = "writedown.db";
     //Database Version
     private static final int DATABASE_VERSION = 1;
 

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BackupData.OnBackupListener {
 
     public static final int REQUEST_CODE_OPEN_DIRECTORY = 1;
+    public NavigationView navigationView;
     private static final int REQUEST_CODE_LOCATION = 2;
     private BackupData backupData;
     private Context context;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //add this line to display menu1 when the activity is loaded
@@ -134,22 +135,22 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ListActivity();
                 break;
             case R.id.item_sync:
-                //fragment = new Menu3();
                 break;
-            case R.id.item_export:
-                //openFolder();
 
+            //clic sur le bouton "Exporr"
+            case R.id.item_export:
+                //opération à faire depuis android 6.0
+                //verification des permission d'accès au stockage du téléphone.
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    // Request missing location permission.
+                    // Demande de permission
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             REQUEST_CODE_LOCATION);
                 } else {
-                    // Location permission has been granted, continue as usual.
+                    // la permission est deja accordée
                     backupData.exportToSD();
                 }
-
                 break;
             case R.id.item_quit:
                 //sortie de l'application
@@ -212,5 +213,41 @@ public class MainActivity extends AppCompatActivity
         }
         Toast.makeText(context, notify, Toast.LENGTH_SHORT).show();
     }
+
+    //preise en compte de la réponse de demande de permission
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                    //griser le bouton export
+                    Toast.makeText(MainActivity.this, "WRITE_BDD Denied", Toast.LENGTH_SHORT)
+                            .show();
+                    Menu nav_menu = navigationView.getMenu();
+                    nav_menu.findItem(R.id.item_export).setEnabled(false);
+                            //.setClickable(false);
+                }
+                break;
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
 
 }

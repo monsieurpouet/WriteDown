@@ -1,10 +1,14 @@
 package com.example.zpfr3739.myapplication;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BackupData.OnBackupListener {
 
     public static final int REQUEST_CODE_OPEN_DIRECTORY = 1;
-
+    private static final int REQUEST_CODE_LOCATION = 2;
     private BackupData backupData;
     private Context context;
 
@@ -134,7 +138,18 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.item_export:
                 //openFolder();
-                backupData.exportToSD();
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Request missing location permission.
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_CODE_LOCATION);
+                } else {
+                    // Location permission has been granted, continue as usual.
+                    backupData.exportToSD();
+                }
+
                 break;
             case R.id.item_quit:
                 //sortie de l'application

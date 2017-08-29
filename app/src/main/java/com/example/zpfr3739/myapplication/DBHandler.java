@@ -6,6 +6,14 @@ package com.example.zpfr3739.myapplication;
 
  onCreate: It is called first time when database is created. We usually create tables and the initialize here.
  onUpgrade: Run when database is upgraded / changed, like drop tables, add tables etc.
+
+ Accès à la BDD depuis la console:
+ adb devices
+ adb -s emulator-xxxx shell
+ cd data/data/<your-package-name>/databases/
+ sqlite3 <your-db-name>.db
+ Select * from table1 where ...;
+
  */
 
 import android.database.sqlite.SQLiteOpenHelper;

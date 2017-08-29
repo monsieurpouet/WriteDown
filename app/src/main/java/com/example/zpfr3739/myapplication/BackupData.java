@@ -38,6 +38,7 @@ public class BackupData {
         private final String folderSD = Environment.getExternalStorageDirectory() + "/WriteDownDbDump";
 
         private Context context;
+        public String backupDBPath;
 
         public BackupData(Context context) {
             this.context = context;
@@ -71,8 +72,8 @@ public class BackupData {
 
                 if (sd.canWrite()) {
 
-                    SimpleDateFormat formatTime = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss");
-                    String backupDBPath = dataName + "_" + formatTime.format(new Date());
+                    SimpleDateFormat formatTime = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                    backupDBPath = "WriteDown_" + formatTime.format(new Date()) + ".db";
 
                     File currentDB = new File(Environment.getDataDirectory(), data);
                     File backupDB = new File(sd, backupDBPath);
@@ -110,6 +111,11 @@ public class BackupData {
             public void onFinishExport(String error);
 
         }
+
+        public String getbackupDBPath(){
+            return backupDBPath;
+        }
+
     }
 
 

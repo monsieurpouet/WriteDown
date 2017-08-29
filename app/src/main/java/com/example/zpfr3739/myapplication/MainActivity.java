@@ -1,18 +1,21 @@
 package com.example.zpfr3739.myapplication;
 
+/**
+Activité principale contenant la toolbar et le Navigation drawer
+ Les items du navigation drawer menent vers des fragments contenant les vues principales de l'application
+ Gestion de l'export de la base de données SQLITE
+ */
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
-import android.support.v4.provider.DocumentFile;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,28 +23,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-
 import static java.lang.System.exit;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BackupData.OnBackupListener {
 
-    public static final int REQUEST_CODE_OPEN_DIRECTORY = 1;
+
     public NavigationView navigationView;
+    //code necessaires pour la demande de permission
+    public static final int REQUEST_CODE_OPEN_DIRECTORY = 1;
     private static final int REQUEST_CODE_LOCATION = 2;
     private BackupData backupData;
     private Context context;
-
     private DBHandler db;
 
+    //méthode principale
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity
 
         context = this;
 
+        //instanciation de la BDD
         db = new DBHandler(context);
         backupData = new BackupData(context);
         backupData.setOnBackupListener(this);
@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
+        //instanciation du Drawer et de la toolbar
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //add this line to display menu1 when the activity is loaded
+        //affichage du menu par defaut
         displaySelectedScreen(R.id.item_write);
 
         //URL du serveur web
@@ -77,8 +76,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //methode en cas d'appui sur le bouton retour
     @Override
     public void onBackPressed() {
+        //Ferme le drawer si il est ouvert
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -87,21 +88,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // ajoute les items au menu.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    //gestion des actions lorsqu'on clique sur un item du menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // recupération de l'ID de l'item cliqué
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //clique sur l'item "About"
         if (id == R.id.app_bar_about) {
             toastMessage("Vous avez cliqué sur About");
             return true;
@@ -111,33 +112,39 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //gestion du clique dans le menu du drawer
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
-        //calling the method displayselectedscreen and passing the id of selected menu
+        //appel de la méthode displayselectedscreen en lui passant l'ID de l'item cliqué
         displaySelectedScreen(item.getItemId());
         //make this method blank
         return true;
     }
 
+    //méthode qui affiche un le fragent correspondant à l'item cliqué
     private void displaySelectedScreen(int itemId) {
 
-        //creating fragment object
+        //creation d'un objet fragment null
         Fragment fragment = null;
 
-        //initializing the fragment object which is selected
+        //lancemet du fragment en fonction de l'ID de l'item
         switch (itemId) {
+            //clique sur l'item "Write"
             case R.id.item_write:
+                //affichage du fragment d'écriture d'une note
                 fragment = new WriteActivity();
                 break;
+            //clique sur l'item "List"
             case R.id.item_list:
+                //affichage du fragment pour le listing des notes
                 fragment = new ListActivity();
                 break;
+            //clique sur l'item "Sync"
             case R.id.item_sync:
                 break;
 
-            //clic sur le bouton "Exporr"
+            //clic sur le bouton "Export"
             case R.id.item_export:
                 //opération à faire depuis android 6.0
                 //verification des permission d'accès au stockage du téléphone.
@@ -152,99 +159,75 @@ public class MainActivity extends AppCompatActivity
                     backupData.exportToSD();
                 }
                 break;
+
+            //clique sur le bouton "Quit"
             case R.id.item_quit:
                 //sortie de l'application
                 exit(0);
                 break;
         }
 
-        //replacing the fragment
+        //remplacement du fragment
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
 
+        //fermeture du drawer à la fin du clique
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
 
+    //méthode pour afficher un toast
     public void toastMessage(String message){
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
     }
 
-    public void openFolder(){
+    //méthode pour afficher une SnackBar
+    public void snackMessage(String Message){
+        Snackbar.make(findViewById(R.id.content_frame),Message,Snackbar.LENGTH_LONG).show();
 
+    }
+
+    //methode qui permet d'ouvrir un explorateur de fichier
+    public void openFolder(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         startActivityForResult(intent, REQUEST_CODE_OPEN_DIRECTORY);
 
     }
 
-  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_OPEN_DIRECTORY){
-            Uri uriTree = data.getData();
-            toastMessage(uriTree.getPath());
-
-            String currentDBPath = "//data//{package name}//databases//{database name}";
-            String backupDBPath = "{database name}";
-
-        }
-    }
-
-    /*
-    *C:\Users\ZPFR3739\AppData\Local\Android\sdk\platform-tools
-    * adb devices
-    *adb -s emulator-xxxx shell
-    *cd data/data/<your-package-name>/databases/
-    *sqlite3 <your-db-name>.db
-    * Select * from table1 where ...;
-    *
-    * /data/data/com.example.zpfr3739.myapplication/databases
-    *
-    */
-
+    //methode pour action à la fin de l'export de la BDD
     @Override
     public void onFinishExport(String error) {
         String notify = error;
+        //si pas d'erreur d'export affichage d'une notification contenant le nom du fichier enregistré
         if (error == null) {
-            notify = "Export success";
+            notify = "Export success : " + backupData.getbackupDBPath();
         }
-        Toast.makeText(context, notify, Toast.LENGTH_SHORT).show();
+        snackMessage(notify);
     }
 
-    //preise en compte de la réponse de demande de permission
+    //prise en compte de la réponse de demande de permission
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
+                    // la permission est acceptée!
                 } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-
-                    //griser le bouton export
-                    Toast.makeText(MainActivity.this, "WRITE_BDD Denied", Toast.LENGTH_SHORT)
-                            .show();
+                    // la permission est refusée.
+                    // Le bouton d'export ne sera plus disponible pour l'utilisateur
+                    snackMessage("WRITE_BDD Denied");
                     Menu nav_menu = navigationView.getMenu();
                     nav_menu.findItem(R.id.item_export).setEnabled(false);
-                            //.setClickable(false);
                 }
                 break;
             }
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 

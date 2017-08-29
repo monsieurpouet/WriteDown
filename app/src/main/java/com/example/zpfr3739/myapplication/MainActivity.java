@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
         //clique sur l'item "About"
         if (id == R.id.app_bar_about) {
-            toastMessage("Vous avez cliqué sur About");
+            snackMessage("WriteDown V1.0 created by S.PAIRAULT");
             return true;
         }
 

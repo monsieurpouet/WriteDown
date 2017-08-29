@@ -21,7 +21,8 @@ import android.widget.ListView;
 
 
 /**
- * Created by ZPFR3739 on 10/08/2017.
+ * Fragment qui affiche les notes crées sous forme de liste (listview)
+ * Le clique sur un élément de la liste permet de modifier ou supprimer une note
  */
 
 public class ListActivity extends Fragment{
@@ -34,31 +35,19 @@ public class ListActivity extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+        //on retourne le bon layout pour ce fragment
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
 
-            /*case R.id.app_bar_refresh:
-                ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur refresh");
-                populateListView();
-                //
-                return true;*/
-
-        }
-        return false;
-    }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //you can set the title for your toolbar here for different fragments different titles
+        //modification du titre dans la toolbar
         getActivity().setTitle("List");
 
+        //instanciation de la listview et de la BDD
         mlistView = (ListView) getView().findViewById(R.id.liste_note_view);
         myDbHandler = new DBHandler(getActivity());
 
@@ -71,7 +60,7 @@ public class ListActivity extends Fragment{
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, final long id) {
 
-                //
+                //ouverture d'un popup qui demande confirmation de la suppression de la note
                 AlertDialog.Builder alert = new AlertDialog.Builder(
                         getActivity());
                 alert.setTitle("Attention!!");
@@ -84,14 +73,12 @@ public class ListActivity extends Fragment{
                         myDbHandler.removeNote(id);
                         populateListView();
                         dialog.dismiss();
-
                     }
                 });
                 alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         dialog.dismiss();
                     }
                 });
@@ -104,31 +91,26 @@ public class ListActivity extends Fragment{
 
         });
 
+        //faire une action lorsqu'on fait un clique court sur une note
         mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
 
-                //action quand on fait un click sur un element de la liste
-                //passage vers le fragment d'écriture
-
+                //passage vers le fragment d'écriture pour modification de la note
                 Fragment newWriteFrag = new WriteActivity();
 
                 //ajout d'un bundle contenant l'id de la note
                 // pour pouvoir le renvoyer au fragment d'écriture pour modifier la note concernée
                 Bundle arguments = new Bundle();
-                //int id_note = (int) id;
-                //arguments.putInt("ID_NOTE", id_note);
                 arguments.putLong("ID_NOTE", id);
 
                 newWriteFrag.setArguments(arguments);
 
-
+                //renvoi vers le fragment d'écriture
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, newWriteFrag);
                 ft.commit();
-
-                //renvoyer l'ID, le titre et le contenu de la note
 
             }
 
@@ -136,21 +118,25 @@ public class ListActivity extends Fragment{
 
     }
 
+    //creation de la barre de menu
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+        //on instancie le menu dédié au fragment de liste qui comprend essetiellement une icone de recherche
         menu.clear();
         inflater.inflate(R.menu.list_menu, menu);
 
+        //mise en place d'une recherche de note à l'aide d'une "SearchView"
         MenuItem itemSearch = menu.findItem(R.id.app_bar_search);
         SearchView searchView = new SearchView(getActivity());
 
+        //création d'un listener pour la recherche
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
+            //actualisation de la liste des notes en fonction des lettres tapés dans la barre de recherche
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
@@ -161,12 +147,14 @@ public class ListActivity extends Fragment{
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+
+    //insertion des notes dans la listview
     public void populateListView(){
 
         //recuperer les données et les insérer dans la liste
         Cursor data = myDbHandler.getDataNote();
 
-
+        //création d'un adapteur qui fait le lien entre la BDD et la view
         adapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_2,
                 data,

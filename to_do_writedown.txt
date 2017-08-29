@@ -23,23 +23,15 @@ https://stackoverflow.com/questions/16391124/picture-coming-from-camera-or-galle
 	
 	http://www.thecrazyprogrammer.com/2016/09/android-upload-image-server-using-volley.html
 	https://www.mytrendin.com/send-images-remote-server-android-using-volley-library/
-
-	penser à modifier l'androidmanifest:
-	android.permission.INTERNET
-	android.permission.WRITE_EXTERNAL_STORAGE
-
 	
+https://stackoverflow.com/questions/23797747/how-to-send-all-sqlite-data-to-online-server
+https://stackoverflow.com/questions/9478875/send-data-from-android-to-webserver
+https://stackoverflow.com/questions/12457758/android-want-to-transfer-data-from-sqlite-db-to-web-server
 
+4) export sur la mémoire interne + verifier par try catch si pas de stockage externe
++ remplacer toast d'export terminé avec info sur nom du fichier
 
-4)export de la base de données Sqlite via bouton du navigation drawer> voir export sqlite
-export du .db avec nomage approprié
-
-https://stackoverflow.com/questions/19093458/copy-database-file-to-sdcard-in-android
-https://stackoverflow.com/questions/26581801/how-to-save-listview-item-as-a-text-file
-https://www.youtube.com/watch?v=0Mi32_uf1MY
-https://www.youtube.com/watch?v=BCTgJNo0pDU
-https://www.youtube.com/watch?v=NXYYdMVioQ0
-https://www.youtube.com/watch?v=-V25G7pR1nE
+5) ajouter balise après selection du texte
 
 
 ##########DONE#############
@@ -48,3 +40,4 @@ changement couleur de base > jaune moutarde comme google note
 iconfinder
 supprimer icone refresh
 clic court sur une note de la liste redirige vers fragment ecriture
+export de la base de données Sqlite via bouton du navigation drawer> voir export sqlite | export du .db avec nomage approprié

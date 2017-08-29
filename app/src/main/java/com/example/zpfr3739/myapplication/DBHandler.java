@@ -1,11 +1,7 @@
 package com.example.zpfr3739.myapplication;
 
 /**
- Gestion de la base SQlite
- handle database Create, Read, Update and Delete (CRUD)
-
- onCreate: It is called first time when database is created. We usually create tables and the initialize here.
- onUpgrade: Run when database is upgraded / changed, like drop tables, add tables etc.
+ Gestion de la base SQlite : Create, Read, Update and Delete (CRUD)
 
  Accès à la BDD depuis la console:
  adb devices
@@ -25,9 +21,9 @@ import android.database.Cursor;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    //Database Name
+    //nom de la BDD
     public static final String DATABASE_NAME = "writedown.db";
-    //Database Version
+    //version de la BDD
     private static final int DATABASE_VERSION = 1;
 
     //nom de la table
@@ -73,18 +69,19 @@ public class DBHandler extends SQLiteOpenHelper {
     // on peut faire ce qu'on veut ici, comme recréer la base :
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,int newVersion) {
-        // Drop older table if existed
+        // supprimer les anciennes tables si elles existent
         db.execSQL(SUPPRESSION_TABLE_NOTE);
-        // Creating tables again
+        // Créer à nouveau les tables
         onCreate(db);
     }
 
+    //Downgrade de la BDD
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    //insert new note
+    //insertion d'une nouvelle note dans la table "Note_Table"
     public void insertNote(String titre, String note, String date_cre, String date_modif) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -99,7 +96,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    //retourne les info de la table
+    //retourne le contenu de la table
     public Cursor getDataNote(){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT id_note _id,* FROM " + NOTE_TABLE_NAME;

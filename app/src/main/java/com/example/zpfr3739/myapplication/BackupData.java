@@ -11,40 +11,35 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by ZPFR3739 on 25/08/2017.
+ * Export de la base de données SQlite contenant les notes
  */
 
 public class BackupData {
 
 
-    DBHandler myDbHandler;
+        DBHandler myDbHandler;
 
-        // url for database
+        // emplacement de la BDD
         private final String dataPath = "//data//com.example.zpfr3739.myapplication//databases//";
 
-        // name of main data
+        // nom de la BDD
         private final String dataName = myDbHandler.DATABASE_NAME;
 
-        // data main
+        // chemin complet vers BDD
         private final String data = dataPath + dataName;
 
-        // name of temp data
-        private final String dataTempName = myDbHandler.DATABASE_NAME + "_temp";
-
-        // temp data for copy data from sd then copy data temp into main data
-        private final String dataTemp = dataPath + dataTempName;
-
-        // folder on sd to backup data
+        // répertoire ou sera déposé l'export de la BDD
         private final String folderSD = Environment.getExternalStorageDirectory() + "/WriteDownDbDump";
 
         private Context context;
         public String backupDBPath;
+        private OnBackupListener onBackupListener;
 
         public BackupData(Context context) {
             this.context = context;
         }
 
-        // create folder if it not exist
+        // creation du dossier de destination si il n'existe pas
         private void createFolder() {
             File sd = new File(folderSD);
             if (!sd.exists()) {
@@ -57,9 +52,9 @@ public class BackupData {
         }
 
         /**
-         * Copy database to sd card
-         * name of file = database name + time when copy
-         * When finish, we call onFinishExport method to send notify for activity
+         * Copie de la BDD vers le répertoire de destination
+         * nom du fichier = nom de l'application + date de copie
+         * Quand la copie est terminée, on fait appel à la méthode "onFinishExport" pour envoyer une notification à l'activité principale
          */
         public void exportToSD() {
 
@@ -89,7 +84,7 @@ public class BackupData {
                         System.out.println("db not exist");
                     }
                 }else{
-                    System.out.println("peux pas ecrire");
+                    System.out.println("on ne peux pas ecrire");
                 }
 
             } catch (Exception e) {
@@ -100,18 +95,15 @@ public class BackupData {
         }
 
 
-
-        private OnBackupListener onBackupListener;
-
         public void setOnBackupListener(OnBackupListener onBackupListener) {
             this.onBackupListener = onBackupListener;
         }
 
         public interface OnBackupListener {
             public void onFinishExport(String error);
-
         }
 
+        //récupération du chemin de l'export
         public String getbackupDBPath(){
             return backupDBPath;
         }

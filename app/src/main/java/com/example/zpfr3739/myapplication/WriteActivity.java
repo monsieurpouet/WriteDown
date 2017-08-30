@@ -23,7 +23,8 @@ import static com.example.zpfr3739.myapplication.R.id.imageButton;
 
 
 /**
- * Activité de création d'une note
+ * Activité de création, de modification et d'enregistrement d'une note
+ * Une barre d'édition en bas du layout permet d'ajouter les balises MarkDown
  */
 
 public class WriteActivity extends Fragment{
@@ -44,15 +45,12 @@ public class WriteActivity extends Fragment{
     private long key_id_note;
     private static final int PICK_IMAGE_REQUEST= 99;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //returning our layout file
-        //change R.layout.yourlayoutfilename for each of your fragments
+        //recupération du bon layout pour ce fragment
         setHasOptionsMenu(true);
-
-
-
         return inflater.inflate(R.layout.fragment_write, container, false);
     }
 
@@ -61,10 +59,11 @@ public class WriteActivity extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //you can set the title for your toolbar here for different fragments different titles
+        //modification du titre dans la toolbar
         getActivity().setTitle("Write");
         title = (TextInputLayout) getView().findViewById(R.id.input_layout_title);
         content = (TextInputLayout) getView().findViewById(R.id.input_layout_note);
+
         myDbHandler = new DBHandler(getActivity());
 
         //initialisation de l'id d'une note à zero
@@ -77,13 +76,13 @@ public class WriteActivity extends Fragment{
             key_id_note = bundle_list.getLong("ID_NOTE");
             Cursor curs_note = myDbHandler.getNoteById(key_id_note);
             if (curs_note.moveToFirst()) {
-                //str = cursor.getString(cursor.getColumnIndex("content"));
                 title.getEditText().setText(curs_note.getString(curs_note.getColumnIndex("titre_note")));
                 content.getEditText().setText(curs_note.getString(curs_note.getColumnIndex("note")));
             }
 
         }
 
+        //ajout des actions lors d'un clique sur l'un des boutons de la barre d'édition
         imageButton1 = (ImageButton) getView().findViewById(imageButton);
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,43 +163,46 @@ public class WriteActivity extends Fragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+        //recuperer le menu dédié au fragment
         menu.clear();
         inflater.inflate(R.menu.write_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    //actions lors du clique sur un item du menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            //clique sur le bouton save
             case R.id.app_bar_save:
-                ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur save");
                 onClickSave();
+                ((MainActivity) getActivity()).snackMessage("Note sauvegardée !");
                 return true;
 
+            //clique sur le bouton clear
             case R.id.app_bar_clear:
-                ((MainActivity) getActivity()).toastMessage("Vous avez cliqué sur clear");
                 onClickClear();
+                ((MainActivity) getActivity()).snackMessage("Clear de la note. Elle ne sera pas sauvegardée");
                 return true;
 
         }
         return false;
     }
 
+    //méthode pour récuperer la date actuelle
     public String getDateNow(){
         Date dateNow = new Date();
         DateFormat shortDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.SHORT,Locale.FRANCE);
         return shortDateFormat.format(dateNow);
     }
 
-
+    //méthode pour ajouter du texte à la fin d'un edittext
     public void addTextInEditText(String add){
         content.getEditText().append(add);
 
     }
 
-    //vérification du contenu de la note et sauvegarde d'une note
+    //vérification du contenu non vide de la note et sauvegarde d'une note
     public void onClickSave(){
         String newTitre = title.getEditText().getText().toString();
         String newContent = content.getEditText().getText().toString();
@@ -215,7 +217,6 @@ public class WriteActivity extends Fragment{
             }else{
                 myDbHandler.updateNoteById(key_id_note,newTitre,newContent,getDateNow());
             }
-            ((MainActivity) getActivity()).toastMessage("Good");
 
         }
     }

@@ -28,23 +28,28 @@ public class BackupData {
         // chemin complet vers BDD
         private final String data = dataPath + dataName;
 
-        // répertoire ou sera déposé l'export de la BDD
+        // répertoire ou sera déposé l'export de la BDD sur la carte SD
         private final String folderSD = Environment.getExternalStorageDirectory() + "/WriteDownDbDump";
+
+        // répertoire ou sera déposé l'export de la BDD sur le stockage interne
+        private final String folderInternal;
 
         private Context context;
         public String backupDBPath;
+        public String type_storage;
         private OnBackupListener onBackupListener;
 
         public BackupData(Context context) {
             this.context = context;
+            //destination de l'export sur stockage sur la mémoire Interne
+            folderInternal  = this.context.getFilesDir() + "/bdd/WriteDownDbDump";
         }
 
         // creation du dossier de destination si il n'existe pas
-        private void createFolder() {
-            File sd = new File(folderSD);
-            if (!sd.exists()) {
-                sd.mkdirs();
-                System.out.println(folderSD);
+        private void createFolder(String folder) {
+            File filefolder = new File(folder);
+            if (!filefolder.exists()) {
+                filefolder.mkdirs();
                 System.out.println("create folder");
             } else {
                 System.out.println("exits");
@@ -52,39 +57,70 @@ public class BackupData {
         }
 
         /**
-         * Copie de la BDD vers le répertoire de destination
+         * Copie de la BDD vers le répertoire de destination Interne ou externe
          * nom du fichier = nom de l'application + date de copie
          * Quand la copie est terminée, on fait appel à la méthode "onFinishExport" pour envoyer une notification à l'activité principale
          */
-        public void exportToSD() {
+        public void exportBdd(String type_stor) {
 
             String error = null;
             try {
-
-                createFolder();
-
+                //creation des répertoires
+                createFolder(folderSD);
+                createFolder(folderInternal);
                 File sd = new File(folderSD);
+                File internal = new File(folderSD);
+                SimpleDateFormat formatTime = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                type_storage = type_stor;
 
-                if (sd.canWrite()) {
+                //vérification de la destination de l'export
+                if (type_stor == "SD"){
 
-                    SimpleDateFormat formatTime = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                    backupDBPath = "WriteDown_" + formatTime.format(new Date()) + ".db";
+                    //tentative d'écriture sur la carte SD
+                    if (sd.canWrite()) {
 
-                    File currentDB = new File(Environment.getDataDirectory(), data);
-                    File backupDB = new File(sd, backupDBPath);
+                        backupDBPath = "WriteDown_" + formatTime.format(new Date()) + ".db";
 
-                    if (currentDB.exists()) {
+                        File currentDB = new File(Environment.getDataDirectory(), data);
+                        File backupDB = new File(sd, backupDBPath);
 
-                        FileChannel src = new FileInputStream(currentDB).getChannel();
-                        FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                        dst.transferFrom(src, 0, src.size());
-                        src.close();
-                        dst.close();
-                    } else {
-                        System.out.println("db not exist");
+                        if (currentDB.exists()) {
+
+                            FileChannel src = new FileInputStream(currentDB).getChannel();
+                            FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                            dst.transferFrom(src, 0, src.size());
+                            src.close();
+                            dst.close();
+                        } else {
+                            System.out.println("db not exist");
+                        }
+                    }else{
+                        System.out.println("on ne peux pas ecrire sur la carte SD");
                     }
-                }else{
-                    System.out.println("on ne peux pas ecrire");
+
+                } else if (type_storage == "Internal"){
+                    //tentative d'écriture sur la mémoire interne
+                    if (internal.canWrite()) {
+
+                        backupDBPath = "WriteDown_" + formatTime.format(new Date()) + ".db";
+
+                        File currentDB = new File(Environment.getDataDirectory(), data);
+                        File backupDB = new File(internal, backupDBPath);
+
+                        if (currentDB.exists()) {
+
+                            FileChannel src = new FileInputStream(currentDB).getChannel();
+                            FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                            dst.transferFrom(src, 0, src.size());
+                            src.close();
+                            dst.close();
+                        } else {
+                            System.out.println("db not exist");
+                        }
+                    }else{
+                        System.out.println("on ne peux pas ecrire sur la mémoire interne");
+                    }
+
                 }
 
             } catch (Exception e) {
@@ -107,6 +143,9 @@ public class BackupData {
         public String getbackupDBPath(){
             return backupDBPath;
         }
+
+
+        public String getTypeStorage(){ return type_storage;}
 
     }
 

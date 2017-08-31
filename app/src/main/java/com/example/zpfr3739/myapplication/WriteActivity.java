@@ -196,9 +196,16 @@ public class WriteActivity extends Fragment{
         return shortDateFormat.format(dateNow);
     }
 
-    //méthode pour ajouter du texte à la fin d'un edittext
+    //méthode pour ajouter du texte à la position du curseur
+    //si une selection est en cours, elle sera remplacée par le texte ajouté
     public void addTextInEditText(String add){
-        content.getEditText().append(add);
+
+        int start = Math.max(content.getEditText().getSelectionStart(), 0);
+        int end = Math.max(content.getEditText().getSelectionEnd(), 0);
+
+        content.getEditText().getText().replace(Math.min(start, end), Math.max(start, end),
+                add, 0, add.length());
+
 
     }
 

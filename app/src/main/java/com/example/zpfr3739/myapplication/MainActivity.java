@@ -8,6 +8,7 @@ Activité principale contenant la toolbar et le Navigation drawer
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,7 +20,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -155,8 +158,35 @@ public class MainActivity extends AppCompatActivity
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             REQUEST_CODE_LOCATION);
                 } else {
-                    // la permission est deja accordée
-                    backupData.exportToSD();
+
+                    //la permission est deja accordée
+                    //ouverture d'un popup qui demande confirmation de la suppression de la note
+                    //l'utilisateur à le choix de sauvegarder sur le stockage interne ou sur la carte SD
+                    AlertDialog.Builder askLocationStorage = new AlertDialog.Builder(this,android.R.style.Theme_Material_Dialog_Alert);
+
+                    askLocationStorage.setTitle("Exports").setMessage("Où voulez-vous exporter vos Notes ?");
+                    askLocationStorage.setPositiveButton("SD", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //appel de la méthode pour faire le backup sur la carte SD
+                            backupData.exportBdd("SD");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    askLocationStorage.setNeutralButton("Internal", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //appel de la méthode pour faire le backup sur la mémoire interne
+                            backupData.exportBdd("Internal");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    askLocationStorage.show();
+
                 }
                 break;
 
@@ -203,7 +233,7 @@ public class MainActivity extends AppCompatActivity
         String notify = error;
         //si pas d'erreur d'export affichage d'une notification contenant le nom du fichier enregistré
         if (error == null) {
-            notify = "Export success : " + backupData.getbackupDBPath();
+            notify = "Export success : " + backupData.getbackupDBPath() + " on " + backupData.getTypeStorage();
         }
         snackMessage(notify);
     }

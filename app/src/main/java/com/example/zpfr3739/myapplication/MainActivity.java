@@ -7,10 +7,12 @@ Activité principale contenant la toolbar et le Navigation drawer
  */
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -22,11 +24,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static java.lang.System.exit;
 
@@ -42,6 +59,9 @@ public class MainActivity extends AppCompatActivity
     private BackupData backupData;
     private Context context;
     private DBHandler db;
+
+    //URL du server Web
+    private static final String URL = "http://90.84.41.97/index.php";
 
     //méthode principale
     @Override
@@ -72,9 +92,6 @@ public class MainActivity extends AppCompatActivity
 
         //affichage du menu par defaut
         displaySelectedScreen(R.id.item_write);
-
-        //URL du serveur web
-        String serverweb_url = "http://192.168.43.87/myfiles/index.php";
 
 
     }
@@ -145,6 +162,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             //clique sur l'item "Sync"
             case R.id.item_sync:
+
+                SendData();
                 break;
 
             //clic sur le bouton "Export"
@@ -259,6 +278,62 @@ public class MainActivity extends AppCompatActivity
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+
+    public void SendData(){
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving Name...");
+        progressDialog.show();
+
+
+        //recuperer les données et les insérer dans la liste
+        Cursor data = db.getDataNote();
+
+        //https://www.youtube.com/watch?v=A66bhWItCU4
+        while (data.moveToNext()){
+
+            final String sync_id = data.getString(data.getColumnIndex(DBHandler.NOTE_ID));
+            final String sync_titre = data.getString(data.getColumnIndex(DBHandler.NOTE_TITRE));
+            final String sync_content = data.getString(data.getColumnIndex(DBHandler.NOTE_CONTENT));
+            final String sync_create_date = data.getString(data.getColumnIndex(DBHandler.NOTE_CREATE_DATE));
+            final String sync_modify_date = data.getString(data.getColumnIndex(DBHandler.NOTE_MODIFY_DATE));
+
+
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            System.out.println(response);
+                            Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                        }
+                    }){
+                @Override
+                protected Map<String,String> getParams(){
+                    Map<String,String> params = new HashMap<String, String>();
+                    params.put("id",sync_id);
+                    params.put("titre",sync_titre);
+                    params.put("content",sync_content);
+                    params.put("create_date",sync_create_date);
+                    params.put("modify_date",sync_modify_date);
+                    return params;
+                }
+
+            };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+
+        }
+
     }
 
 

@@ -25,9 +25,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -46,6 +47,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static java.lang.System.exit;
+import static java.lang.Thread.sleep;
 
 
 public class MainActivity extends AppCompatActivity
@@ -60,8 +62,10 @@ public class MainActivity extends AppCompatActivity
     private Context context;
     private DBHandler db;
 
+
+
     //URL du server Web
-    private static final String URL = "http://90.84.41.97/index.php";
+    private static final String URL = "http://90.84.41.97/insertdata.php";
 
     //méthode principale
     @Override
@@ -82,8 +86,31 @@ public class MainActivity extends AppCompatActivity
 
         //instanciation du Drawer et de la toolbar
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInputFromInputMethod(getCurrentFocus().getWindowToken(), 0);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        };
+
+
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -107,6 +134,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
 
 
     @Override
@@ -162,7 +190,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             //clique sur l'item "Sync"
             case R.id.item_sync:
-
+                //envoi des données vers le serveur web
                 SendData();
                 break;
 
@@ -280,20 +308,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
+    //méthode d'envoi des données de notes vers le serveur HTTP
     public void SendData(){
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Saving Name...");
+
+        //recuperer les données de la table note dans un curseur
+        Cursor data = db.getDataNote();
+        final int totalProgressTime = data.getCount();
+        int jumpTime = 0;
+
+        //affichage d'une barre de progression
+        //N.B : la barre fonctionne mais on ne la voit pas car l'envoi se fait trop rapidement
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving Notes to Webserver...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setMax(totalProgressTime);
+        progressDialog.setProgress(0);
         progressDialog.show();
 
-
-        //recuperer les données et les insérer dans la liste
-        Cursor data = db.getDataNote();
-
-        //https://www.youtube.com/watch?v=A66bhWItCU4
+        //on parcours le curseur
         while (data.moveToNext()){
 
+            //on recupère les données par colonne
             final String sync_id = data.getString(data.getColumnIndex(DBHandler.NOTE_ID));
             final String sync_titre = data.getString(data.getColumnIndex(DBHandler.NOTE_TITRE));
             final String sync_content = data.getString(data.getColumnIndex(DBHandler.NOTE_CONTENT));
@@ -301,21 +337,24 @@ public class MainActivity extends AppCompatActivity
             final String sync_modify_date = data.getString(data.getColumnIndex(DBHandler.NOTE_MODIFY_DATE));
 
 
-
+            //création d'une requete via la librairie Volley
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                     new Response.Listener<String>() {
                         @Override
+                        //ecoute de la réponse du serveur
                         public void onResponse(String response) {
                             System.out.println(response);
-                            Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
+                            System.out.println(error);
+
                         }
                     }){
+                //stockage des données récupérées dans une HashMap
                 @Override
                 protected Map<String,String> getParams(){
                     Map<String,String> params = new HashMap<String, String>();
@@ -329,11 +368,21 @@ public class MainActivity extends AppCompatActivity
 
             };
 
+            //envoi de la requete via Volley
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);
 
+            //avancement de la barre de progression
+            jumpTime += 1;
+            progressDialog.setProgress(jumpTime);
+
         }
 
+        //si tout a été envoyé, on ferme la barre de progression
+        if (progressDialog.getProgress() == totalProgressTime) {
+            progressDialog.dismiss();
+        }
+        snackMessage("Sync done");
     }
 
 

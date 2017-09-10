@@ -144,7 +144,7 @@ public class BackupData {
             return backupDBPath;
         }
 
-
+        //récupération du type de stockage (interne ou externe)
         public String getTypeStorage(){ return type_storage;}
 
     }
